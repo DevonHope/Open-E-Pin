@@ -1,10 +1,12 @@
 {"commands":[
-{"command":"inspect.interference","params":{"exclude_pairs":[["SC_Insert_1","SC_Bezel"],["SC_Insert_2","SC_Bezel"],["SC_Screw_1","SC_Insert_1"],["SC_Screw_2","SC_Insert_2"],["ribbon","part_J3"]]}},
-{"command":"file.export_step","params":{"path":"../out/bezel.step","bodies":["SC_Bezel"]}},
-{"command":"file.export_step","params":{"path":"../out/back_cover.step","bodies":["SC_BackCover"]}},
-{"command":"file.export_step","params":{"path":"../out/button.step","bodies":["SC_Button"]}},
-{"command":"file.export_stl","params":{"path":"../out/bezel.stl","bodies":["SC_Bezel"],"quality":"fine"}},
-{"command":"file.export_stl","params":{"path":"../out/back_cover.stl","bodies":["SC_BackCover"],"quality":"fine"}},
-{"command":"file.export_stl","params":{"path":"../out/button.stl","bodies":["SC_Button"],"quality":"fine"}},
-{"command":"file.export_step","params":{"path":"../out/assembly.step"}}
+{"command": "inspect.interference", "params": {"exclude_pairs": [["SC_Insert_1", "SC_Bezel"], ["SC_Insert_2", "SC_Bezel"], ["SC_Screw_1", "SC_Insert_1"], ["SC_Screw_2", "SC_Insert_2"], ["ribbon", "part_J3"]]}},
+{"command": "file.export_step", "params": {"path": "../out/bezel.step", "bodies": ["SC_Bezel"]}},
+{"command": "file.export_step", "params": {"path": "../out/back_cover.step", "bodies": ["SC_BackCover"]}},
+{"command": "file.export_step", "params": {"path": "../out/button.step", "bodies": ["SC_Button"]}},
+{"command": "file.export_step", "params": {"path": "../out/pin_retainer.step", "bodies": ["SC_PinRetainer"]}},
+{"command": "file.export_stl", "params": {"path": "../out/bezel.stl", "bodies": ["SC_Bezel"], "quality": "fine"}},
+{"command": "file.export_stl", "params": {"path": "../out/back_cover.stl", "bodies": ["SC_BackCover"], "quality": "fine"}},
+{"command": "file.export_stl", "params": {"path": "../out/button.stl", "bodies": ["SC_Button"], "quality": "fine"}},
+{"command": "file.export_stl", "params": {"path": "../out/pin_retainer.stl", "bodies": ["SC_PinRetainer"], "quality": "fine"}},
+{"command": "file.export_step", "params": {"path": "../out/assembly.step"}}
 ]}
