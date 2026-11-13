@@ -28,7 +28,7 @@ config EPIN_MIN_REFRESH_MV
 
 config EPIN_EPD_BUSY_TIMEOUT_S
 	int "Longest wait for the panel BUSY line, in seconds"
-	default 60
+	default 120
 
 config EPIN_HW_REV
 	int "Hardware revision reported in the Info characteristic"

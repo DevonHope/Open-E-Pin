@@ -2,7 +2,7 @@
 
 description: |
   Good Display GDEH0169E02, 1.69 inch round 400x400 Spectra 6 e-paper
-  (IST7163 controller) on 4-wire SPI. Used directly by the Open E-Pin
+  (IST7601 / JD7601 controller) on 4-wire SPI. Used directly by the Open E-Pin
   application, not through the Zephyr display API.
 
 compatible: "gooddisplay,gdeh0169e02"

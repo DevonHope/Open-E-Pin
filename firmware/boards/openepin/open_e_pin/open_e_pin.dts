@@ -94,10 +94,10 @@
 	epd: epd@0 {
 		compatible = "gooddisplay,gdeh0169e02";
 		reg = <0>;
-		spi-max-frequency = <4000000>;
+		spi-max-frequency = <2000000>;	/* as the vendor sample */
 		dc-gpios = <&gpio0 17 GPIO_ACTIVE_HIGH>;	/* high = data */
 		reset-gpios = <&gpio0 15 GPIO_ACTIVE_LOW>;
-		/* Spec table: BUSY low = busy. Note 6-4 says the opposite; check on a real panel. */
+		/* BUSY low = busy: spec pin table and the vendor sample agree (note 6-4 says the opposite). */
 		busy-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
 		power-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;	/* TPS22916C enable */
 		width = <400>;

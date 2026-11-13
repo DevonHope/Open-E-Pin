@@ -65,7 +65,8 @@ static int wait_idle(void)
 {
 	int64_t deadline = k_uptime_get() + CONFIG_EPIN_EPD_BUSY_TIMEOUT_S * 1000LL;
 
-	k_msleep(1);
+	/* The vendor sample waits 10 ms after PON and DRF before polling. */
+	k_msleep(10);
 	while (gpio_pin_get_dt(&busy) == 1) {
 		if (k_uptime_get() > deadline) {
 			LOG_ERR("BUSY timeout");
@@ -74,6 +75,17 @@ static int wait_idle(void)
 		k_msleep(10);
 	}
 	return 0;
+}
+
+/* DTM1 command, then wait for BUSY (as the vendor sample does) and leave DC
+ * high for the pixel data that follows. */
+static int start_frame(void)
+{
+	int err = send_cmd(EPD_CMD_DTM, NULL, 0);
+
+	err = err ? err : wait_idle();
+	gpio_pin_set_dt(&dc, 1);
+	return err;
 }
 
 /* Disconnect every line into the panel so an unpowered panel isn't fed
@@ -116,16 +128,20 @@ static int power_on_and_init(void)
 	gpio_pin_configure_dt(&rst, GPIO_OUTPUT_INACTIVE);
 	gpio_pin_configure_dt(&busy, GPIO_INPUT);
 
-	/* Hardware reset: RST_N low for 10 ms. */
+	/* Hardware reset as in the vendor sample's RESET(): two pulses of
+	 * RST_N low 20 ms / high 10 ms, then wait for BUSY to clear. */
 	k_msleep(10);
-	gpio_pin_set_dt(&rst, 1);
-	k_msleep(10);
-	gpio_pin_set_dt(&rst, 0);
-	k_msleep(10);
+	for (int i = 0; i < 2; i++) {
+		gpio_pin_set_dt(&rst, 1);
+		k_msleep(20);
+		gpio_pin_set_dt(&rst, 0);
+		k_msleep(10);
+	}
 	err = wait_idle();
 	if (err) {
 		return err;
 	}
+	k_msleep(10);
 
 	for (size_t i = 0; i < ARRAY_SIZE(epd_init_seq); i++) {
 		err = send_cmd(epd_init_seq[i].cmd, epd_init_seq[i].data, epd_init_seq[i].len);
@@ -172,7 +188,8 @@ int epd_show_frame(const uint8_t *frame, size_t len)
 	}
 
 	err = power_on_and_init();
-	err = err ? err : send_cmd(EPD_CMD_DTM, frame, len);
+	err = err ? err : start_frame();
+	err = err ? err : write_bytes(frame, len);
 	err = err ? err : refresh_and_sleep();
 	epd_power_off();
 
@@ -188,8 +205,7 @@ int epd_show_solid(enum epd_color color)
 	memset(line, (color << 4) | color, sizeof(line));
 
 	err = power_on_and_init();
-	err = err ? err : send_cmd(EPD_CMD_DTM, NULL, 0);
-	gpio_pin_set_dt(&dc, 1);
+	err = err ? err : start_frame();
 	for (int y = 0; !err && y < EPD_HEIGHT; y++) {
 		err = write_bytes(line, sizeof(line));
 	}

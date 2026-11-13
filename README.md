@@ -107,8 +107,8 @@ CRC-32 and draws it on the panel. It also reports battery level through the stan
 Service. It builds for the pin board (`open_e_pin/nrf52840`) and for an nRF52840 DK for bench
 work, and the transfer logic has unit tests that run on a PC.
 
-The panel init sequence is still a placeholder until it's checked against Good Display's
-sample code. See the [firmware README](firmware/README.md) for building, flashing, logs over
+The panel driver follows Good Display's sample code for this panel but hasn't been run on
+a real panel yet. See the [firmware README](firmware/README.md) for building, flashing, logs over
 RTT, and the checklist before powering a real panel.
 
 ## Android app
