@@ -1,0 +1,14 @@
+# KiCad
+*.kicad_prl
+*-backups/
+fp-info-cache
+*.bak
+*.lck
+_autosave-*
+# Python
+__pycache__/
+*.pyc
+# Routing scratch files (Specctra DSN/SES)
+hardware/build/
+# SolidCraft lock files
+.~*.lock

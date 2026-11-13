@@ -1,0 +1,19 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/* Pin map: hardware/README.md, "MCU pin map". */
+
+&pinctrl {
+	epd_spi_default: epd_spi_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 22)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 24)>;
+		};
+	};
+
+	epd_spi_sleep: epd_spi_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 22)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 24)>;
+			low-power-enable;
+		};
+	};
+};

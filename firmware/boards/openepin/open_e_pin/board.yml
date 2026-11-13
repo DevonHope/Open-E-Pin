@@ -1,0 +1,6 @@
+board:
+  name: open_e_pin
+  full_name: Open E-Pin
+  vendor: openepin
+  socs:
+    - name: nrf52840

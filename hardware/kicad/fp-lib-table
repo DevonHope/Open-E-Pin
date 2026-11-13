@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "OpenEPin")(type "KiCad")(uri "${KIPRJMOD}/OpenEPin.pretty")(options "")(descr "Open E-Pin custom footprints"))
+)

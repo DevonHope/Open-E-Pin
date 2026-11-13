@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+config BOARD_OPEN_E_PIN
+	select SOC_NRF52840_QIAA

@@ -1,0 +1,38 @@
+References,Qty,Value,Footprint,Part number / note
+C1 C10 C11 C12 C13 C14 C15 C16 C17 C18 C19 C21 C22 C23 C24,15,1u 25V,Capacitor_SMD:C_0402_1005Metric,"C1: X5R; C10: EPD_VDD (VCCI) 1u, X5R; C11: VGH, X5R; C12: VGL, X5R; C13: pin 1 VREFR, X5R; C14: pin 4 VDDL, X5R; C15: pin 5 VSH2, X5R; C16: pin 6 VREFL, X5R; C17: pin 15 VDD, X5R; C18: pin 16 VSH3, X5R; C19: pin 18 VSL2, X5R; C21: pin 20 VSH1, X5R; C22: pin 22 VSL1, X5R; C23: pin 24 VCOM, X5R; C24: charge-pump flying cap, X5R"
+C2,1,1u 10V,Capacitor_SMD:C_0402_1005Metric,X5R
+C3 C4,2,1u,Capacitor_SMD:C_0402_1005Metric,
+C5 C7,2,100n,Capacitor_SMD:C_0402_1005Metric,C5: ADC hold; C7: module VDD
+C6,1,4.7u,Capacitor_SMD:C_0402_1005Metric,module VDD bulk
+C20,1,1u 35V,Capacitor_SMD:C_0402_1005Metric,"pin 19 VSL3 (35 V per reference), X5R"
+D1 D2 D3,3,NSR0530H,Diode_SMD:D_SOD-323,"D1: VGH diode. 30 V, 0.5 A, Vf<=430 mV (MBR0530 class); D2: charge pump to GND. 30 V, 0.5 A, Vf<=430 mV; D3: VGL diode. 30 V, 0.5 A, Vf<=430 mV"
+F1,1,0.1A hold,Fuse:Fuse_0603_1608Metric,Bourns MF-PSMF010X-2
+J1,1,USB-C,Connector_USB:USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal,GCT USB4105-GF-A
+J2,1,BATT JST-PH,Connector_JST:JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal,JST S2B-PH-SM4-TB. Pin 1 = +
+J3,1,GDEH0169E02,Connector_FFC-FPC:Hirose_FH12-32S-0.5SH_1x32-1MP_P0.50mm_Horizontal,Hirose FH12-32S-0.5SH. VERIFY contact side: panel FPC contacts face the board after the fold
+L1,1,47uH,Inductor_SMD:L_Taiyo-Yuden_NR-30xx,Taiyo Yuden NRH3010T470MN
+LED1,1,red,LED_SMD:LED_0402_1005Metric,charge indicator
+Q1,1,DMG2305UX,Package_TO_SOT_SMD:SOT-23,Diodes DMG2305UX-7
+Q2,1,DMG1012T,Package_TO_SOT_SMD:SOT-523,Diodes DMG1012T-7
+Q3,1,NX3008NBK,Package_TO_SOT_SMD:SOT-23,"Nexperia NX3008NBK or Vishay Si1304BDL (Vds>=30V, Vgs(th) 1.3V max)"
+R1,1,4.53k,Resistor_SMD:R_0402_1005Metric,ISET: 135/4530 = 30 mA (use 5.6k for 24 mA cells)
+R4 R2 R3,3,10M,Resistor_SMD:R_0402_1005Metric,"R4: Q1 gate pull-up; R2: battery divider top, 1%; R3: battery divider bottom, 1%"
+R6 R7,2,5.1k,Resistor_SMD:R_0402_1005Metric,1%
+R8,1,0.47,Resistor_SMD:R_0603_1608Metric,"1%, booster current sense"
+R11,1,2.2k,Resistor_SMD:R_0402_1005Metric,
+R14 R5,2,100k,Resistor_SMD:R_0402_1005Metric,R14: limits CHG node current into the 3 V GPIO; R5: Q2 gate
+R15 R12,2,10k,Resistor_SMD:R_0402_1005Metric,R15: booster FET gate pull-down; R12: BS0 low = 4-wire SPI
+SW1,1,BUTTON,Button_Switch_SMD:SW_SPST_EVQP7A,Panasonic EVQ-P7A side-press
+TH1,1,10k B3380,Resistor_SMD:R_0402_1005Metric,"Murata NCP15XH103F03RC, touching the cell"
+TP1,1,3V0,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD
+TP2,1,SWDIO,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD
+TP3,1,SWDCLK,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD
+TP4,1,RESET,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD
+TP5,1,GND,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD
+U1,1,MDBT50Q-1MV2,RF_Module:Raytac_MDBT50Q,"Raytac nRF52840 module, chip antenna"
+U2,1,BQ25101,OpenEPin:Texas_YFP0006_DSBGA-6_0.9x1.6mm_P0.4mm,"TI BQ25101YFPR (YFP0006, 0.4 mm pitch)"
+U3,1,TPS7A0230,Package_TO_SOT_SMD:SOT-23-5,TI TPS7A0230PDBVR
+U4,1,TPS22916C,OpenEPin:Texas_YFP0004_DSBGA-4_0.78x0.78mm_P0.4mm,"TI TPS22916CYFPR (YFP0004, 0.4 mm pitch)"
+U5,1,USBLC6-2SC6,Package_TO_SOT_SMD:SOT-23-6,ST USBLC6-2SC6
+BAT,1,"LiPo 3.7 V 60 mAh, JST-PH, with protection circuit",not on board,x2robotics 60 mAh pouch (16 x 13 x 4 mm); option: CM Batteries 55 mAh 2.5 mm custom cell
+DISP,1,GDEH0169E02,not on board,Good Display 1.69in round 400x400 Spectra 6 e-paper

@@ -1,0 +1,72 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/*
+ * Bench setup: nRF52840 DK with a GDEH0169E02 on a Good Display adapter
+ * board (DESPI-C02 or similar). Wire:
+ *   SCK P1.15, MOSI P1.13, CS P1.12, DC P1.11, RST P1.10, BUSY P1.14,
+ *   adapter power switch (optional) P1.08.
+ * DK Button 1 stands in for the side button. P0.29 (AIN5) can take a
+ * battery divider; P1.07 stands in for the charger status line.
+ */
+
+#include <zephyr/dt-bindings/adc/nrf-saadc.h>
+
+&pinctrl {
+	epd_spi_default: epd_spi_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
+				<NRF_PSEL(SPIM_MOSI, 1, 13)>;
+		};
+	};
+
+	epd_spi_sleep: epd_spi_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 1, 15)>,
+				<NRF_PSEL(SPIM_MOSI, 1, 13)>;
+			low-power-enable;
+		};
+	};
+};
+
+/ {
+	zephyr,user {
+		io-channels = <&adc 5>;
+		chg-gpios = <&gpio1 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+	};
+};
+
+&adc {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	channel@5 {
+		reg = <5>;
+		zephyr,gain = "ADC_GAIN_1_6";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40)>;
+		zephyr,input-positive = <NRF_SAADC_AIN5>;
+		zephyr,resolution = <12>;
+		zephyr,oversampling = <4>;
+	};
+};
+
+&spi2 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	pinctrl-0 = <&epd_spi_default>;
+	pinctrl-1 = <&epd_spi_sleep>;
+	pinctrl-names = "default", "sleep";
+	cs-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+
+	epd: epd@0 {
+		compatible = "gooddisplay,gdeh0169e02";
+		reg = <0>;
+		spi-max-frequency = <4000000>;
+		dc-gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
+		busy-gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
+		power-gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
+		width = <400>;
+		height = <400>;
+	};
+};

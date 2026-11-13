@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+mainmenu "Open E-Pin firmware"
+
+menu "Open E-Pin"
+
+config EPIN_ADV_TIMEOUT_S
+	int "Advertising window after a button press, in seconds"
+	default 60
+
+config EPIN_IDLE_TIMEOUT_S
+	int "Time to stay awake after the app disconnects, in seconds"
+	default 30
+	help
+	  The pin keeps advertising for this long after a disconnect so an
+	  interrupted upload can resume, then goes to System OFF.
+
+config EPIN_BATTERY_POLL_S
+	int "Battery measurement interval while awake, in seconds"
+	default 60
+
+config EPIN_MIN_REFRESH_MV
+	int "Lowest battery voltage that still allows a panel refresh, in mV"
+	default 3400
+	help
+	  A refresh draws a burst of current from a 60 mAh cell. Below this
+	  voltage the pin refuses COMMIT and CLEAR with LOW_BATTERY.
+
+config EPIN_EPD_BUSY_TIMEOUT_S
+	int "Longest wait for the panel BUSY line, in seconds"
+	default 60
+
+config EPIN_HW_REV
+	int "Hardware revision reported in the Info characteristic"
+	default 1
+
+endmenu
+
+source "Kconfig.zephyr"

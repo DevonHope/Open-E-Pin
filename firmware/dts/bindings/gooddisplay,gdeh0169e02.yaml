@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+description: |
+  Good Display GDEH0169E02, 1.69 inch round 400x400 Spectra 6 e-paper
+  (IST7163 controller) on 4-wire SPI. Used directly by the Open E-Pin
+  application, not through the Zephyr display API.
+
+compatible: "gooddisplay,gdeh0169e02"
+
+include: spi-device.yaml
+
+properties:
+  dc-gpios:
+    type: phandle-array
+    required: true
+    description: Data/command select. Active (high) = data.
+
+  reset-gpios:
+    type: phandle-array
+    required: true
+    description: RST_N, active low.
+
+  busy-gpios:
+    type: phandle-array
+    required: true
+    description: BUSY. Flag it so that "active" means the panel is busy.
+
+  power-gpios:
+    type: phandle-array
+    description: Optional load-switch enable for the panel supply.
+
+  width:
+    type: int
+    required: true
+
+  height:
+    type: int
+    required: true
