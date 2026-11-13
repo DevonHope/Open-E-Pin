@@ -86,12 +86,13 @@ a [PDF of the schematic](hardware/docs/schematic.pdf) if you don't have KiCad.
 
 | Exploded view | Back |
 |---|---|
-| ![Exploded view of the case, board, battery and fasteners](hardware/docs/case-exploded.png) | ![Back of the case with the two pin-back post pockets and the screw heads](hardware/docs/case-back.png) |
+| ![Exploded view of the case, board, battery and fasteners](hardware/docs/case-exploded.png) | ![Back of the case with the two pin-back posts and the screw heads](hardware/docs/case-back.png) |
 
 A two-part printed case: a **bezel** with the display window, and a **back cover**. Two M2
 countersunk screws go in from the back into brass heat-set inserts in the bezel, so the front
-is just the ring and the display, and two snap hooks hold the top. Two locking pin-back posts,
-glued into pockets on the back, stop the pin from spinning on a bag. A small printed plunger
+is just the ring and the display, and two snap hooks hold the top. Two locking tie tack posts
+stop the pin from spinning on a bag. They are fitted from inside the back cover, so their heads
+can't pull through, and a printed retainer bar holds them in place. A small printed plunger
 works the side button.
 
 The [SolidCraft](hardware/case/solidcraft/) design is the master for the case; the printable

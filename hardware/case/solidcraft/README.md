@@ -5,7 +5,7 @@ from it; see `../README.md` for the parts, fasteners, fit numbers and assembly.
 
 | File | What it is |
 |---|---|
-| `open_e_pin_case.sc` | The design: native bodies `SC_Bezel`, `SC_BackCover`, `SC_Button`, the fastener bodies `SC_Screw_1`, `SC_Screw_2`, `SC_Insert_1`, `SC_Insert_2`, with their full feature history and design parameters, plus the component `Reference` (`../reference.step`, embedded) |
+| `open_e_pin_case.sc` | The design: native bodies `SC_Bezel`, `SC_BackCover`, `SC_Button`, `SC_PinRetainer`, the pin post bodies `SC_Post_1`, `SC_Post_2`, the fastener bodies `SC_Screw_1`, `SC_Screw_2`, `SC_Insert_1`, `SC_Insert_2`, with their full feature history and design parameters, plus the component `Reference` (`../reference.step`, embedded) |
 | `export.json` | Runs the interference check and writes every export to `../out/` |
 
 Export, from this folder:
@@ -35,13 +35,21 @@ Everything in the case parts is built from native sketches and features.
   a **clearance cut** round each bezel boss (`Bezel boss clearance 1/2`: diameter
   `BEZEL_BOSS_OD + 2 * BOSS_GAP`, from `BOSS_END` up to the board's back face, through the ledge
   and ribs), the **countersunk holes** (`M2 countersunk hole 1/2`: `CLEAR_D` through, 90°
-  countersink `CSK_D` in the back face), USB-C mouth and pocket, hook windows, button opening,
-  and two round pockets for the pin-back post pads (10.2 mm, 0.6 mm deep, at x = ±15, y = +8).
+  countersink `CSK_D` in the back face), USB-C mouth and pocket, hook windows, button opening, and
+  for each pin post (`Pin boss 1/2`, `Pin head recess 1/2`, `Pin hole 1/2`, at
+  X = ±`PIN_SPACING` / 2, Y = `PIN_Y`): a `PIN_BOSS_D` raised pad `PIN_PAD_DEPTH` high on the
+  inside of the back plate, a `PIN_RECESS_D` recess for the post head down to the plate's inner
+  face, and a `PIN_HOLE_D` hole through the plate.
 - **Button**: one sketch of the flange and stem, extruded 1.2 mm.
+- **Pin retainer** (`SC_PinRetainer`, at the end of the timeline): a `RET_L` x `RET_W` x `RET_T`
+  bar on the back plate's inner face, centred on Y = `PIN_Y`, with a pocket over each raised
+  pad (`PIN_BOSS_D + 2 * RET_FIT`, `PIN_PAD_DEPTH` deep) and two `RET_POST_D` stand-offs at
+  X = ±`RET_POST_X` that end `RET_POST_GAP` short of the board's back face.
 - **Fasteners** (at the end of the timeline, for the fit check and the assembly export only):
   `SC_Screw_1/2` (M2 x `SCREW_L` countersunk, ISO 14581: a 2 mm shank and a 90° head of
   `SCREW_HEAD_D`, head flush with the back face) and `SC_Insert_1/2` (`INSERT_OD` x `INSERT_L`,
-  2 mm bore, from `BOSS_END` up into the bezel bosses).
+  2 mm bore, from `BOSS_END` up into the bezel bosses), and `SC_Post_1/2`, the tie tack posts
+  (a `PIN_PAD_D` x `PIN_PAD_DEPTH` head in its recess and a `PIN_SHANK_D` x `PIN_SHANK_L` shank).
 - **Reference**: `../reference.step` imported as a component: board with 4.6 mm holes, parts,
   battery, JST plug, display, folded ribbon.
 
@@ -53,7 +61,13 @@ Window: `WINDOW_D`, `WINDOW_CY`.
 Screws: `CLEAR_D` (2.3), `CSK_D` (4.0), `BOSS_OD` (5.0, back cover), `BEZEL_BOSS_OD` (4.2),
 `BOSS_END` (-3.3), `BOSS_GAP` (0.2), `INSERT_HOLE` (3.1), `INSERT_DEPTH` (3.6).
 Fastener models: `SCREW_L` (8), `SCREW_HEAD_D` (3.8), `INSERT_OD` (3.2), `INSERT_L` (3).
-Pin posts: `PIN_PAD_D`, `PIN_PAD_DEPTH`, `PIN_SPACING`, `PIN_Y`.
+Pin posts: `PIN_SPACING` (30), `PIN_Y` (16), `PIN_PAD_D` (4.7, head), `PIN_PAD_DEPTH` (0.5, head
+thickness and recess depth), `PIN_SHANK_D` (1.15), `PIN_SHANK_L` (12.7), `PIN_HOLE_D` (1.3),
+`PIN_RECESS_D` (`PIN_PAD_D` + 0.2), `PIN_BOSS_D` (8).
+Pin retainer: `RET_T` (1.2), `RET_W` (6), `RET_L` (`PIN_SPACING` + 8), `RET_FIT` (0.15),
+`RET_POST_D` (2.5), `RET_POST_X` (`PIN_SPACING` / 2 + 2.5), `RET_POST_GAP` (0.1).
+Moving the posts is one parameter: `PIN_Y` moves the holes, recesses, raised pads, retainer
+and posts together (check J2 and the battery with the interference check).
 
 They drive the sketches, extrudes, holes, cylinders and the construction planes the sketches
 sit on; for example, changing `WALL` rebuilds both shells and changing `BOSS_END` moves the
@@ -62,4 +76,4 @@ The X/Y positions of the screw axes, the boss ribs, the hook angles and the ledg
 round parts are fixed numbers taken from the board (`../board_envelope.json`); if the board
 moves its holes, edit those features too.
 
-Volumes: bezel 2378 mm³, back cover 5416 mm³, button 11.1 mm³.
+Volumes: bezel 2378 mm³, back cover 5542 mm³, button 11.1 mm³, pin retainer 280 mm³.
