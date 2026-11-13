@@ -10,9 +10,9 @@ object Panel {
 }
 
 /**
- * The panel's colours. [code] is the 4-bit value sent to the panel. [rgb] is roughly what
- * the ink looks like, used as the dithering target. Both come from docs/ble-protocol.md;
- * tune [rgb] against a real panel for better dithering.
+ * The panel's colours. [code] is the 4-bit value sent to the panel (checked against Good
+ * Display's sample code for this panel). [rgb] is roughly what the ink looks like, used as
+ * the dithering target; tune it against a real panel for better dithering.
  */
 enum class PanelColor(val code: Int, val rgb: Int) {
     BLACK(0x0, 0x191E21),

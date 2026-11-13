@@ -27,9 +27,15 @@ static const struct gpio_dt_spec rst = GPIO_DT_SPEC_GET(EPD_NODE, reset_gpios);
 static const struct gpio_dt_spec busy = GPIO_DT_SPEC_GET(EPD_NODE, busy_gpios);
 static const struct gpio_dt_spec pwr = GPIO_DT_SPEC_GET_OR(EPD_NODE, power_gpios, {0});
 
-/* Largest single SPI transfer; the nRF52840 SPIM DMA limit is 65535. */
-#define EPD_SPI_CHUNK 4096
+/* Largest single SPI transfer; the nRF52840 SPIM DMA limit is 65535. The
+ * vendor sample toggles CS around every byte; CONFIG_EPIN_EPD_CS_PER_BYTE
+ * does the same if the panel turns out to need it. */
+#define EPD_SPI_CHUNK (IS_ENABLED(CONFIG_EPIN_EPD_CS_PER_BYTE) ? 1 : 4096)
 
+/* BUSY timeouts from the vendor sample. */
+#define BUSY_TIMEOUT_INIT_MS    15000
+#define BUSY_TIMEOUT_POWER_MS   60000
+#define BUSY_TIMEOUT_REFRESH_MS (CONFIG_EPIN_EPD_BUSY_TIMEOUT_S * 1000)
 
 static int write_bytes(const uint8_t *data, size_t len)
 {
@@ -61,12 +67,11 @@ static int send_cmd(uint8_t cmd, const uint8_t *data, size_t len)
 	return write_bytes(data, len);
 }
 
-static int wait_idle(void)
+static int wait_idle(int32_t timeout_ms)
 {
-	int64_t deadline = k_uptime_get() + CONFIG_EPIN_EPD_BUSY_TIMEOUT_S * 1000LL;
+	int64_t deadline = k_uptime_get() + timeout_ms;
 
-	/* The vendor sample waits 10 ms after PON and DRF before polling. */
-	k_msleep(10);
+	k_msleep(1);
 	while (gpio_pin_get_dt(&busy) == 1) {
 		if (k_uptime_get() > deadline) {
 			LOG_ERR("BUSY timeout");
@@ -77,19 +82,28 @@ static int wait_idle(void)
 	return 0;
 }
 
-/* DTM1 command, then wait for BUSY (as the vendor sample does) and leave DC
- * high for the pixel data that follows. */
+/* DTM: the vendor sample waits for BUSY between the command and the frame. */
 static int start_frame(void)
 {
 	int err = send_cmd(EPD_CMD_DTM, NULL, 0);
 
-	err = err ? err : wait_idle();
+	err = err ? err : wait_idle(BUSY_TIMEOUT_INIT_MS);
 	gpio_pin_set_dt(&dc, 1);
 	return err;
 }
 
-/* Disconnect every line into the panel so an unpowered panel isn't fed
- * through its ESD diodes, and nothing floats on our side. */
+/* Before the panel loses power: drive CS, DC and RST low and let the SPI
+ * pins go to their sleep state (disconnected), so no line sits high and
+ * feeds the unpowered panel through its ESD diodes. */
+static void lines_low(void)
+{
+	(void)gpio_pin_configure_dt(&spi.config.cs.gpio, GPIO_OUTPUT_LOW);
+	(void)gpio_pin_configure_dt(&dc, GPIO_OUTPUT_LOW);
+	(void)gpio_pin_configure_dt(&rst, GPIO_OUTPUT_LOW);
+	(void)pm_device_action_run(spi.bus, PM_DEVICE_ACTION_SUSPEND);
+}
+
+/* With the panel off: disconnect everything so nothing floats or leaks. */
 static void park_pins(void)
 {
 	(void)pm_device_action_run(spi.bus, PM_DEVICE_ACTION_SUSPEND);
@@ -113,6 +127,22 @@ int epd_setup(void)
 	return 0;
 }
 
+/* RESET() from the vendor sample: two low/high pulses, then wait for BUSY. */
+static int reset_pulse(void)
+{
+	int err;
+
+	for (int i = 0; i < 2; i++) {
+		gpio_pin_set_dt(&rst, 1); /* active = RST_N low */
+		k_msleep(20);
+		gpio_pin_set_dt(&rst, 0);
+		k_msleep(10);
+	}
+	err = wait_idle(BUSY_TIMEOUT_INIT_MS);
+	k_msleep(10);
+	return err;
+}
+
 static int power_on_and_init(void)
 {
 	int err;
@@ -128,20 +158,13 @@ static int power_on_and_init(void)
 	gpio_pin_configure_dt(&rst, GPIO_OUTPUT_INACTIVE);
 	gpio_pin_configure_dt(&busy, GPIO_INPUT);
 
-	/* Hardware reset as in the vendor sample's RESET(): two pulses of
-	 * RST_N low 20 ms / high 10 ms, then wait for BUSY to clear. */
-	k_msleep(10);
+	/* The vendor bring-up resets twice, each a double 20 ms low pulse. */
 	for (int i = 0; i < 2; i++) {
-		gpio_pin_set_dt(&rst, 1);
-		k_msleep(20);
-		gpio_pin_set_dt(&rst, 0);
-		k_msleep(10);
+		err = reset_pulse();
+		if (err) {
+			return err;
+		}
 	}
-	err = wait_idle();
-	if (err) {
-		return err;
-	}
-	k_msleep(10);
 
 	for (size_t i = 0; i < ARRAY_SIZE(epd_init_seq); i++) {
 		err = send_cmd(epd_init_seq[i].cmd, epd_init_seq[i].data, epd_init_seq[i].len);
@@ -155,15 +178,19 @@ static int power_on_and_init(void)
 static int refresh_and_sleep(void)
 {
 	static const uint8_t zero = 0x00;
-	static const uint8_t dslp = 0xA5;
+	static const uint8_t dslp = EPD_DSLP_CHECK;
 	int err;
 
+	/* Same order and delays as the vendor sample. */
 	err = send_cmd(EPD_CMD_PON, NULL, 0);
-	err = err ? err : wait_idle();
+	err = err ? err : wait_idle(BUSY_TIMEOUT_POWER_MS);
+	k_msleep(10);
 	err = err ? err : send_cmd(EPD_CMD_DRF, &zero, 1);
-	err = err ? err : wait_idle();
+	k_msleep(10);
+	err = err ? err : wait_idle(BUSY_TIMEOUT_REFRESH_MS);
 	err = err ? err : send_cmd(EPD_CMD_POF, &zero, 1);
-	err = err ? err : wait_idle();
+	err = err ? err : wait_idle(BUSY_TIMEOUT_POWER_MS);
+	k_msleep(20);
 	if (!err) {
 		err = send_cmd(EPD_CMD_DSLP, &dslp, 1);
 	}
@@ -172,10 +199,12 @@ static int refresh_and_sleep(void)
 
 void epd_power_off(void)
 {
-	park_pins();
+	lines_low();
 	if (pwr.port) {
 		gpio_pin_set_dt(&pwr, 0);
+		k_msleep(1);
 	}
+	park_pins();
 }
 
 int epd_show_frame(const uint8_t *frame, size_t len)
