@@ -27,7 +27,7 @@ CUSTOM_SYMBOLS = {
         ref="U", desc="TI TPS22916C 2 A load switch with output discharge, DSBGA-4 (YFP). VERIFY pinout",
         pins=[("A2", "VIN", "L", "power_in"), ("B2", "ON", "L", "input"),
               ("B1", "GND", "L", "power_in"), ("A1", "VOUT", "R", "power_out")]),
-    # Good Display GDEH0169E02 (IST7163 controller), pinout from section 6 of
+    # Good Display GDEH0169E02 (IST7601 / JD7601 controller), pinout from section 6 of
     # the GDEH0169E02 specification (Good Display, 2026).
     "GDEH0169E02_FPC": dict(
         ref="J", desc="FPC connector for Good Display GDEH0169E02 1.69in round e-paper (32 pin, 0.5 mm pitch)",
