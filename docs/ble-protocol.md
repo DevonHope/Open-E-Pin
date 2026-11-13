@@ -54,10 +54,9 @@ nibble**. Total size 80 000 bytes. Pixel values are the panel's colour codes:
 Codes `0x4` and `0x7` to `0xF` are invalid. The panel is round: pixels outside the circle
 of radius 200 centred on the image are not visible, and the app sends them as white.
 
-> The colour codes follow the Spectra 6 panels Good Display ships with UC81xx-style
-> controllers. The GDEH0169E02 uses an IST7163, so check the codes against Good Display's
-> ESP32 sample for this panel before trusting them. Only the table above and
-> `Palette.kt` / `epd.h` need to change if they differ.
+The codes, the packing (row-major, left pixel in the high nibble) and the 80 000-byte
+frame match Good Display's sample code for this panel (EPD169_7601); its example image only
+renders correctly when unpacked this way.
 
 ## Info characteristic (read, 16 bytes)
 

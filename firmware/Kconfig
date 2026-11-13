@@ -27,8 +27,18 @@ config EPIN_MIN_REFRESH_MV
 	  voltage the pin refuses COMMIT and CLEAR with LOW_BATTERY.
 
 config EPIN_EPD_BUSY_TIMEOUT_S
-	int "Longest wait for the panel BUSY line, in seconds"
+	int "Longest wait for a panel refresh, in seconds"
 	default 120
+	help
+	  The vendor sample allows 120 s for the refresh, 60 s for power
+	  on/off and 15 s for reset.
+
+config EPIN_EPD_CS_PER_BYTE
+	bool "Toggle panel chip select around every byte"
+	help
+	  The vendor sample raises CS after every byte. By default the frame
+	  goes out in 4 kB bursts with CS held low, which is much faster.
+	  Turn this on if the panel shows garbage.
 
 config EPIN_HW_REV
 	int "Hardware revision reported in the Info characteristic"

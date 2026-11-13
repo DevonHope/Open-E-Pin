@@ -22,6 +22,19 @@ class ImageProcessorTest {
     }
 
     @Test
+    fun solidFramesMatchVendorColourBytes() {
+        // COLOR_BLACK..COLOR_GREEN in Good Display's EPD169_7601 sample.
+        val vendor = mapOf(
+            PanelColor.BLACK to 0x00, PanelColor.WHITE to 0x11, PanelColor.YELLOW to 0x22,
+            PanelColor.RED to 0x33, PanelColor.BLUE to 0x55, PanelColor.GREEN to 0x66,
+        )
+        for ((c, byte) in vendor) {
+            val packed = PanelImage(Array(n) { c }).pack()
+            assertTrue("$c", packed.all { (it.toInt() and 0xFF) == byte })
+        }
+    }
+
+    @Test
     fun paletteColoursMapToThemselves() {
         for (c in PanelColor.entries) {
             val img = ImageProcessor.process(
