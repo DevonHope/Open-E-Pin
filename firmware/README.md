@@ -93,15 +93,18 @@ cc -std=c99 -Wall -Wextra -I../../src test_xfer.c ../../src/xfer.c -o test_xfer 
 
 ## Before the first power-up of a real panel
 
-1. **Init sequence (`src/epd_cmds.h`) is a placeholder.** The GDEH0169E02 specification
-   doesn't list the IST7163 command set. The values are Good Display's sequence for its
-   other Spectra 6 panels with the resolution changed. Replace them with the sequence from
-   Good Display's ESP32 sample for this panel (linked in `hardware/README.md`).
-2. **Colour codes** (`enum epd_color` in `src/epd.h`, `PanelColor` in the app) follow other
-   Spectra 6 panels. Check them against the same sample.
-3. **BUSY polarity:** the spec's pin table says low = busy, but note 6-4 says high = busy.
-   The board file assumes low = busy; flip `GPIO_ACTIVE_LOW` on `busy-gpios` if the driver
-   times out or never waits.
+1. **Init sequence (`src/epd_cmds.h`)** now follows Good Display's sample for this panel
+   (`EPD169_7601`, IST7601 / JD7601): a double reset pulse, the four-byte `INIT_IST7601()`
+   test-mode sequence, then DTM1, power on, refresh, power off and deep sleep. The driver
+   also waits for BUSY after DTM1 and runs SPI at 2 MHz, both as the sample does. It has
+   not been run on a real panel yet.
+2. **Colour codes** (`enum epd_color` in `src/epd.h`, `PanelColor` in the app) match the
+   sample's values (black 0x0, white 0x1, yellow 0x2, red 0x3, blue 0x5, green 0x6). The
+   sample only pushes solid colours and a prebuilt image, so which nibble is the left pixel
+   is still to be confirmed on a panel.
+3. **BUSY polarity:** low = busy in both the spec's pin table and the vendor sample (note
+   6-4 of the spec says the opposite). If the driver times out or never waits, flip
+   `GPIO_ACTIVE_LOW` on `busy-gpios`.
 4. **Low-frequency clock:** the board uses the internal RC oscillator. If the module turns
    out to have a 32.768 kHz crystal fitted, switch to `CONFIG_CLOCK_CONTROL_NRF_K32SRC_XTAL`.
 5. **DC/DC:** the board enables the nRF52840 DC/DC regulator (`reg1`), which needs the
@@ -109,7 +112,7 @@ cc -std=c99 -Wall -Wextra -I../../src test_xfer.c ../../src/xfer.c -o test_xfer 
 
 ## Next steps
 
-- Port the real IST7163 sequence and test on a panel.
+- Test the driver on a real panel.
 - Add LE Secure Connections bonding so only a paired phone can write images.
 - Add MCUboot and BLE firmware updates (SMP).
 - Optionally keep the last image in flash so it can be redrawn without the phone.

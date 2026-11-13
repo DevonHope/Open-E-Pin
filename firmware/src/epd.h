@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: GPL-3.0-or-later */
 /*
  * Driver for the Good Display GDEH0169E02 (1.69" round, 400x400, Spectra 6,
- * IST7163 controller) on 4-wire SPI.
+ * IST7601 / JD7601 controller) on 4-wire SPI.
  *
  * Frame format: 4 bits per pixel, two pixels per byte, left pixel in the
  * high nibble, row-major, 80 000 bytes. See docs/ble-protocol.md.
@@ -16,7 +16,7 @@
 #define EPD_HEIGHT 400
 #define EPD_FRAME_BYTES (EPD_WIDTH * EPD_HEIGHT / 2)
 
-/* Panel colour codes. UNVERIFIED for the IST7163: check against Good Display's sample. */
+/* Panel colour codes, as in Good Display's EPD169_7601 sample (PIC_BLACK etc.). */
 enum epd_color {
 	EPD_BLACK = 0x0,
 	EPD_WHITE = 0x1,
