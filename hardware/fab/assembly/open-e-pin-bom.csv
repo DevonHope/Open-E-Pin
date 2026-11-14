@@ -41,7 +41,7 @@ U4,1,TPS22916C,Load switch DSBGA-4 0.4 mm,Texas Instruments,TPS22916CYFPR,OpenEP
 U5,1,USBLC6-2SC6,USB ESD array SOT-23-6 (genuine ST),STMicroelectronics,USBLC6-2SC6,Package_TO_SOT_SMD:SOT-23-6,ST USBLC6-2SC6,yes
 BT1,1,,"LiPo 3.7 V ~60 mAh pouch, 16 x 13 x <=5 mm, JST PHR-2 lead (red = pin 1 = +), built-in PCM",,,not on board,"x2robotics 60 mAh (051215); needs datasheet, UN 38.3 and IEC 62133-2 reports before use. Alt: CM Batteries 55 mAh 2.5 mm custom cell with R1 = 5.62k",yes
 DS1,1,,Good Display GDEH0169E02 1.69in round 400 x 400 Spectra 6 e-paper,,,not on board,"Single source, spec rev 1.0",yes
-"MP1, MP2",2,,"Screw, thread-forming for plastics, M2 x 8 (2.2 mm nominal), 90 deg countersunk, stainless",,,not on board,For example Bossard / EJOT PT-type or WN 1412 K22 x 8; from the back into the bezel boss (no insert),yes
+"MP1, MP2",2,,"Screw, thread-forming for plastics, M2 / 2.2 mm x 8, 90 deg countersunk, stainless",,,not on board,For example EJOT PT K22 x 8 countersunk (2.2 mm thread-forming); from the back into a 1.7 mm pilot in the bezel boss (no insert),yes
 "MP3, MP4",2,,"Tie tack post, flat 4.7 mm head, 1.15 mm (0.045 in) x 12.7 mm, plated (nickel-free)",,,not on board,Otto Frei 766-14 (yellow plated); avoid unplated nickel silver 765-14 for skin contact (REACH Annex XVII entry 27),yes
 "MP5, MP6",2,,"Locking tie tack clutch for 1.15 mm (0.045 in) posts, nickel-free plating",,,not on board,Otto Frei 385-61 / 386-61 family,yes
 MP7,1,,Printed bezel,,,not on board,hardware/case/out/bezel.stl,yes
