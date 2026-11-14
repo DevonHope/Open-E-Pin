@@ -8,10 +8,11 @@ sleeps until you press its button.
 
 ![The pin in its printed case, USB-C side](hardware/docs/case-usb.png)
 
-> **Status: v0.1, work in progress.** The board is designed and fully routed, the case is
+> **Status: v0.2, work in progress.** The board is designed and fully routed, the case is
 > modelled and fit-checked against every part, and the firmware and app frameworks build and
-> pass their unit tests. Nothing has been built or run on real hardware yet, so please don't
-> order boards from this revision.
+> pass their unit tests. v0.2 fixes the findings of a full design audit
+> ([hardware/docs/audit](hardware/docs/audit/STATUS.md)). Nothing has been built or run on real
+> hardware yet: check the open items in that status table before ordering boards.
 
 ## Features
 
@@ -43,7 +44,7 @@ sleeps until you press its button.
 | Power | 3.0 V LDO (TPS7A0230), switched display rail (TPS22916C) |
 | Controls | One side-press button, charge LED |
 | Board | 56 mm round with a flat for the display ribbon, 4 layers, all parts on the back |
-| Case | 3D-printed bezel and back cover, 60.4 mm across, 10.75 mm thick |
+| Case | 3D-printed bezel and back cover, 60.4 mm across, 10.9 mm thick |
 | Firmware | Zephyr / nRF Connect SDK, flashed over SWD test pads |
 | App | Android 8.0 (API 26) or newer, Kotlin and Jetpack Compose |
 
@@ -89,7 +90,7 @@ a [PDF of the schematic](hardware/docs/schematic.pdf) if you don't have KiCad.
 | ![Exploded view of the case, board, battery and fasteners](hardware/docs/case-exploded.png) | ![Back of the case with the two pin-back posts and the screw heads](hardware/docs/case-back.png) |
 
 A two-part printed case: a **bezel** with the display window, and a **back cover**. Two M2
-countersunk screws go in from the back into brass heat-set inserts in the bezel, so the front
+countersunk thread-forming screws go in from the back into bosses in the bezel, so the front
 is just the ring and the display, and two snap hooks hold the top. Two locking tie tack posts
 stop the pin from spinning on a bag. They are fitted from inside the back cover, so their heads
 can't pull through, and a printed retainer bar holds them in place. A small printed plunger
