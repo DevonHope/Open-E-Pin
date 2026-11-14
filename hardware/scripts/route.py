@@ -30,14 +30,57 @@ CLASSES = {
               ["VBUS_IN", "VBUS", "BAT_CONN", "VBAT_SYS", "3V0", "EPD_VDD"]),
     # Booster loop: switch node and current-sense path carry ~0.5 A pulses.
     "Booster": (0.30, 0.15, 0.60, 0.30, ["EPD_SW", "EPD_RESE", "EPD_PUMP"]),
-    # Panel gate rails reach about +/-20 V: a bit more spacing.
-    "PanelHV": (0.20, 0.20, 0.50, 0.25, ["EPD_VGH", "EPD_VGL", "EPD_VSL3"]),
+    # Panel rails (gate rails about +/-20 V, source rails about +/-15 V): 0.2 mm
+    # spacing everywhere except between the FPC's own 0.5 mm-pitch pads.
+    "PanelHV": (0.20, 0.20, 0.50, 0.25, ["EPD_VGH", "EPD_VGL", "EPD_VSL3", "EPD_VSH1", "EPD_VSH2",
+                                         "EPD_VSH3", "EPD_VSL1", "EPD_VSL2", "EPD_VCOM",
+                                         "EPD_VREFR", "EPD_VREFL", "EPD_VDDL"]),
 }
+PRO = os.path.join(HERE, "..", "kicad", "open-e-pin.kicad_pro")
 DEFAULT = (0.15, 0.15, 0.50, 0.25)
 
 PLANES = [(pcbnew.In1_Cu, "GND"), (pcbnew.In2_Cu, "3V0")]
 PLANE_NAMES = {pcbnew.In1_Cu: "In1.Cu", pcbnew.In2_Cu: "In2.Cu"}
 POURS = [pcbnew.F_Cu, pcbnew.B_Cu]   # GND, added after routing
+
+
+def write_project_rules():
+    """KiCad 7 keeps net classes and board rules in the .kicad_pro, not the .kicad_pcb:
+    write them there so DRC in KiCad checks the rules the board was routed to."""
+    import json
+    d = json.load(open(PRO))
+    ns = d["net_settings"]
+    base = dict(ns["classes"][0])
+    def cls(name, t, c, v, dr):
+        x = dict(base)
+        x.update(name=name, track_width=t, clearance=c, via_diameter=v, via_drill=dr)
+        return x
+    ns["classes"] = [cls("Default", *DEFAULT)] + [cls(n, t, c, v, dr) for n, (t, c, v, dr, _) in CLASSES.items()]
+    ns["netclass_patterns"] = [{"netclass": n, "pattern": net} for n, v in CLASSES.items() for net in v[4]]
+    r = d["board"]["design_settings"]["rules"]
+    r.update(min_clearance=0.127, min_track_width=0.127, min_via_diameter=0.45, min_via_annular_width=0.1,
+             min_through_hole_diameter=0.2, min_copper_edge_clearance=0.3, min_resolved_spokes=1,
+             min_text_height=0.6, min_hole_clearance=0.25)
+    json.dump(d, open(PRO, "w"), indent=2)
+    open(PRO, "a").write("\n")
+
+
+def vias_in_pads(board):
+    """Vias that touch an SMD land (any net): solder wicks into them (IPC-7351B, IPC-A-610)."""
+    out = []
+    smd = [p for p in board.GetPads() if p.GetAttribute() == pcbnew.PAD_ATTRIB_SMD
+           and p.GetParent().GetReference()[:1] not in ("H",)]
+    for t in board.GetTracks():
+        if t.GetClass() != "PCB_VIA":
+            continue
+        c = pcbnew.SHAPE_CIRCLE(t.GetPosition(), t.GetWidth() // 2)
+        for p in smd:
+            if p.GetParent().GetReference().startswith(("J2", "J3", "J1")) and p.GetNumber() in ("MP", "S1"):
+                continue    # big mechanical tabs: a via there is harmless
+            if p.GetEffectiveShape(pcbnew.B_Cu if p.IsOnLayer(pcbnew.B_Cu) else pcbnew.F_Cu).Collide(c, mm(0.05)):
+                out.append((t, p))
+                break
+    return out
 
 
 def netclass(name, track, clear, via, drill):
@@ -134,12 +177,16 @@ def prep():
     for layer, net in PLANES:
         add_zone(board, layer, net)
     # Fan out GND and 3V0 pads to the planes before autorouting, so the router
-    # works around the vias instead of boxing the pads in.
-    stitch(board)
+    # works around the vias instead of boxing the pads in. Pads with no room for a
+    # straight stub (between WCSP balls) get a short escape track now, before routing.
+    left = hand_route(board, stitch(board))
+    if left:
+        print("WARNING: plane pads still without a via:", len(left))
     filler = pcbnew.ZONE_FILLER(board)
     filler.Fill(board.Zones())
 
     board.Save(PCB)
+    write_project_rules()
     os.makedirs(BUILD, exist_ok=True)
     dsn = os.path.join(BUILD, "open-e-pin.dsn")
     if not pcbnew.ExportSpecctraDSN(board, dsn):
@@ -165,6 +212,8 @@ def fix_dsn(path):
     for name, (_, _, _, _, ns) in CLASSES.items():
         s = s.replace(f"(class {name}\n", f"(class {name} " + " ".join(q(n) for n in ns) + "\n", 1)
     s = s.replace("(type route)", "(type protect)")   # keep the plane fan-out as placed
+    if "(via_at_smd" not in s:     # no vias in SMD lands
+        s = s.replace("(structure\n", "(structure\n    (control (via_at_smd off))\n", 1)
     open(path, "w").write(s)
 
 
@@ -241,11 +290,17 @@ def connected_points(board, pad, layer):
     return pts
 
 
+def smd_lands(board):
+    return Grid([("", p.GetEffectiveShape(pcbnew.B_Cu if p.IsOnLayer(pcbnew.B_Cu) else pcbnew.F_Cu))
+                 for p in board.GetPads() if p.GetAttribute() == pcbnew.PAD_ATTRIB_SMD])
+
+
 def stitch(board):
     """Hand-routing step the autorouter skips: every SMD pad on GND or 3V0 gets a short
     track to a via into its inner plane, placed where it clears all other copper."""
     import math
     keepouts = [z for z in all_zones(board) if z.GetIsRuleArea()]
+    lands = smd_lands(board)
     clear = mm(0.2)
     added, missed = 0, []
     for f in board.GetFootprints():
@@ -281,6 +336,8 @@ def stitch(board):
                         continue
                     if any(sh.Collide(vs, clear) for _, sh in obs_side + obs_other):
                         continue
+                    if lands.hits(vs, mm(0.1), None):
+                        continue
                     if any(sh.Collide(ts, clear) for _, sh in obs_side):
                         continue
                     t = pcbnew.PCB_TRACK(board)
@@ -309,6 +366,7 @@ def hand_route(board, pads):
     step = mm(0.05)
     span = mm(5)
     keepouts = [z for z in all_zones(board) if z.GetIsRuleArea()]
+    lands = smd_lands(board)
     done, failed, routed = 0, [], set()
     key0 = lambda o: (o.GetParent().GetReference(), o.GetNumber())
     for pad, tw_mm, cl_mm in [(p, w, c) for p in pads for w, c in ((0.2, 0.15), (0.15, 0.15))]:
@@ -343,7 +401,8 @@ def hand_route(board, pads):
             return (on_board(board, v, mm(0.6))
                     and not any(k.Outline().Collide(c, mm(0.1)) for k in keepouts)
                     and not any(math.hypot(v.x - p.x, v.y - p.y) < (via_d + w) / 2 + mm(0.15) for p, w in vias)
-                    and not any(sh.Collide(c, mm(0.17)) for sh in obs_v))
+                    and not any(sh.Collide(c, mm(0.17)) for sh in obs_v)
+                    and not lands.hits(c, mm(0.1), None))
         own_vias = [(t.GetPosition(), t.GetWidth()) for t in board.GetTracks()
                     if t.GetClass() == "PCB_VIA" and t.GetNetname() == net]
         key = lambda o: (o.GetParent().GetReference(), o.GetNumber())
@@ -540,6 +599,8 @@ def route_net(board, net, tw=mm(0.15), clear=mm(0.15), step=mm(0.1)):
     layers = (pcbnew.B_Cu, pcbnew.F_Cu)
     grids = [Grid(obstacles(board, l)) for l in layers]
     hole_pos = [(t.GetPosition(), t.GetWidth()) for t in board.GetTracks() if t.GetClass() == "PCB_VIA"]
+    lands = Grid([("", p.GetEffectiveShape(pcbnew.B_Cu if p.IsOnLayer(pcbnew.B_Cu) else pcbnew.F_Cu))
+                  for p in board.GetPads() if p.GetAttribute() == pcbnew.PAD_ATTRIB_SMD])
     obb = outline_poly(board).BBox()
     x0, y0 = obb.GetX(), obb.GetY()
     P = lambda i, j: pcbnew.VECTOR2I(x0 + i * step, y0 + j * step)
@@ -564,7 +625,8 @@ def route_net(board, net, tw=mm(0.15), clear=mm(0.15), step=mm(0.1)):
         return (on_board(board, v, mm(0.6))
                 and not any(o.Collide(c, mm(0.1)) for o in keep)
                 and not any(math.hypot(v.x - p.x, v.y - p.y) < (via_d + w) / 2 + mm(0.15) for p, w in hole_pos)
-                and not grids[0].hits(c, clear + mm(0.02), net) and not grids[1].hits(c, clear + mm(0.02), net))
+                and not grids[0].hits(c, clear + mm(0.02), net) and not grids[1].hits(c, clear + mm(0.02), net)
+                and not lands.hits(c, mm(0.1), None))
     to_ij = lambda v: ((v.x - x0) // step, (v.y - y0) // step)
     padmap = {padkey(p): p for p in board.GetPads() if p.GetNetname() == net}
     added = 0
@@ -683,6 +745,12 @@ def repair(board):
     skip = set(STITCH_NETS)
     nets = sorted({p.GetNetname() for p in board.GetPads()} - skip - {""})
     bad = conflicting_nets(board) - skip
+    vip = vias_in_pads(board)
+    for t, p in vip:
+        print(f"  via in {p.GetParent().GetReference()}.{p.GetNumber()} land ({t.GetNetname()}): removed")
+        bad.add(t.GetNetname())
+        board.Delete(t)
+    bad -= skip
     opened = {n for n in nets if len(net_clusters(board, n)) > 1}
     todo = sorted(bad | opened)
     if not todo:

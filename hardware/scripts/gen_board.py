@@ -35,7 +35,10 @@ DISPLAY_Y = -3.0               # display centre (board frame); its glass ledge p
 DISPLAY_GLASS = (49.6, 52.8)   # round glass dia, and length including the ribbon ledge
 J3_MIN_OPENING_Y = 19.4        # ribbon (11.6 mm past the glass) reaches full insertion here; any further out
                                # and the spare ribbon bulges past the case wall, so 19.4 to 20.4
-HOLES = [(-17.5, 19.2), (17.5, 19.2)]   # case boss holes (M2 insert in the bezel boss), outside the glass
+# Case boss holes (4.6 mm, the bezel's 4.2 mm screw bosses pass through), outside the glass.
+# Centres at r = 25.06 mm leave a 0.64 mm web to the rim (v0.1 had r = 25.98 and the
+# holes broke through the edge).
+HOLES = [(-16.8, 18.6), (16.8, 18.6)]
 HOLE_KEEPOUT = 5.0             # square kept clear of parts around each hole (boss 5.0 mm)
 # Notches for the case's two snap hooks near the top (board -y), (x, y) at the rim.
 NOTCH_ANGLE = 40.0             # degrees either side of straight up
@@ -69,24 +72,35 @@ ANCHORS = {
     # USB input and charger, between the USB-C socket and the battery
     "U5": (-4.0, -19.0, "part"), "F1": (-6.0, -20.0, "part"), "R6": (4.0, -21.0, "part"),
     "R7": (-4.0, -21.0, "part"), "U2": (4.0, -18.0, "part"), "R1": (4.0, -17.0, "part"),
-    "C1": (4.0, -17.0, "part"), "C2": (4.0, -17.0, "part"), "LED1": (0.0, -16.0, "part"),
-    "R11": (0.0, -16.0, "part"), "R14": (0.0, -16.0, "part"), "TH1": (8.0, -15.0, "part"),
+    "C1": (4.0, -17.0, "part"), "C2": (4.0, -17.0, "part"),
+    "R11": (0.0, -16.0, "part"), "R14": (0.0, -16.0, "part"),
+    # charge LED below the pin retainer bar, where the back cover has its light window
+    "D4": (-10.0, -9.5, "part"),
+    # NTC at the cell edge: anchored on the battery centre, so it lands against the cell
+    "RT1": ("BAT", None, "part"),
     # reverse-battery FETs next to the battery connector
     "Q1": (11.0, -14.0, "part"), "Q2": (11.0, -14.0, "part"), "R4": (11.0, -14.0, "part"),
-    "R5": (11.0, -14.0, "part"),
+    "R5": (11.0, -14.0, "part"), "R16": (11.0, -14.0, "part"),
     # regulator, module decoupling, display switch, battery sense
-    "U3": (-1.0, -4.0, "part"), "C3": (-1.0, -4.0, "part"), "C4": (-1.0, -4.0, "part"),
-    "C6": (-3.0, -2.0, "part"), "C7": (-3.0, -2.0, "part"),
+    # (ref, pad) anchors put decoupling right at the pin it serves
+    "U3": (-1.0, -4.0, "part"), "C3": ("U3", "1", "part"), "C4": ("U3", "5", "part"),
+    "C6": ("U1", "28", "part"), "C7": ("U1", "30", "part"), "C25": ("U1", "32", "part"),
+    "R17": ("U1", "57", "part"),
     "R2": (-1.0, 0.0, "part"), "R3": (-1.0, 0.0, "part"), "C5": (-1.0, 0.0, "part"),
     "TP1": (-9.0, 10.0, "part"), "TP2": (-9.0, 10.0, "part"), "TP3": (-9.0, 10.0, "part"),
     "TP4": (-9.0, 10.0, "part"), "TP5": (-9.0, 10.0, "part"),
+    "TP6": (-9.0, 10.0, "part"), "TP7": (-9.0, 10.0, "part"), "TP8": (-9.0, 10.0, "part"),
     # display booster, close to the display connector and away from the antenna
     "L1": (10.0, 12.0, "part"), "Q3": (10.0, 12.0, "part"), "R8": (10.0, 12.0, "part"),
     "D1": (7.0, 12.0, "part"), "D2": (7.0, 12.0, "part"), "D3": (7.0, 12.0, "part"),
-    "R15": (10.0, 12.0, "part"), "R12": (0.0, 13.0, "part"), "U4": (-2.0, 8.0, "part"),
+    "R15": ("Q3", "1", "part"), "R12": (0.0, 13.0, "part"), "U4": (-2.0, 8.0, "part"),
 }
-for n in range(10, 25):
+for n in range(11, 24):
     ANCHORS[f"C{n}"] = (2.0, 12.0, "part")
+# booster loop kept tight: input cap at L1, flying cap at the switch node
+ANCHORS["C10"] = ("L1", "1", "part")
+ANCHORS["C24"] = ("L1", "2", "part")
+ANCHORS["C17"] = ("U4", "A1", "part")
 
 PARTS = []
 for ref, (sym, fp, value, note, block) in design.PARTS.items():
@@ -94,12 +108,16 @@ for ref, (sym, fp, value, note, block) in design.PARTS.items():
     ax, ay, kind = ANCHORS[ref]
     PARTS.append((ref, lib, name, value, ax, ay, kind))
 PARTS.append(("BAT", None, None, None, 0, 0, "battery"))
+# Global fiducials for assembly (IPC-7351B 3.4): three, far apart, on the parts side.
+FIDUCIAL = ("Fiducial", "Fiducial_1mm_Mask2mm")
+for ref, (fx, fy) in (("FID1", (-20.0, -14.0)), ("FID2", (20.0, -8.0)), ("FID3", (-12.0, 20.0))):
+    PARTS.append((ref, FIDUCIAL[0], FIDUCIAL[1], "Fiducial", fx, fy, "part"))
 
 
 # Placement order: big edge parts, battery, then the display booster (its loop must
 # stay tight), the display caps, then everything else in list order.
-FIRST = ["J1", "J3", "U1", "J2", "BAT", "SW1", "L1", "Q3", "R8", "R15", "D1", "D2", "D3",
-         "C10", "C11", "C12"]
+FIRST = ["J1", "J3", "U1", "J2", "BAT", "SW1", "L1", "Q3", "C24", "C10", "R8", "R15", "D1", "D2", "D3",
+         "C11", "C12", "U3", "C3", "C4", "C6", "C7", "C25", "U4", "C17", "RT1"]
 PARTS.sort(key=lambda p: FIRST.index(p[0]) if p[0] in FIRST else len(FIRST))
 
 
@@ -192,6 +210,8 @@ def pack(battery):
             placed[ref] = (best[1], best[2], 0, best[3])
             boxes.append(best[3])
             continue
+        if isinstance(ax, str):
+            ax, ay = anchor_point(ax, ay, placed)
         fp = load(lib, name)
         box, opening = local_geometry(fp)
         geo[ref] = (box, opening)
@@ -258,6 +278,29 @@ def pack(battery):
             boxes.append(lane)
             placed[ref + "_ZONE_END"] = ((lane[0] + lane[2]) / 2 + ov[0] * 8, (lane[1] + lane[3]) / 2 + ov[1] * 8)
     return placed
+
+
+_LIB = {r: (lib, name) for r, lib, name, *_ in PARTS}
+
+
+def anchor_point(ref, pad, placed):
+    """Anchor on an already placed item: a pad of a footprint, or the battery centre."""
+    x, y, rot, b = placed[ref]
+    if pad is None:
+        return (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
+    lib, name = _LIB[ref]
+    scratch = pcbnew.BOARD()
+    fp = load(lib, name)
+    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
+    scratch.Add(fp)
+    fp.Flip(pcbnew.VECTOR2I(0, 0), True)
+    fp.SetOrientationDegrees(rot)
+    fp.SetPosition(pt(x, y))
+    for p in fp.Pads():
+        if p.GetNumber() == pad:
+            q = p.GetPosition()
+            return pcbnew.ToMM(q.x) - CX, pcbnew.ToMM(q.y) - CY
+    raise SystemExit(f"{ref} has no pad {pad}")
 
 
 def reserved_zone(ref, b, ov):
@@ -390,9 +433,14 @@ def build(battery_key):
         fp.Value().SetVisible(False)
         fp.Reference().SetTextSize(pcbnew.VECTOR2I(mm(0.6), mm(0.6)))
         fp.Reference().SetTextThickness(mm(0.1))
+        small_ref = ref not in ("J1", "J2", "U1", "SW1")
+        # The board is too dense for readable silk references: keep them on B.Fab (the
+        # assembly drawing) and print silk only for the big edge parts.
         fp.SetPosition(pcbnew.VECTOR2I(0, 0))
         board.Add(fp)
         fp.Flip(pcbnew.VECTOR2I(0, 0), True)  # to the back side
+        if small_ref or ref.startswith("FID"):
+            fp.Reference().SetLayer(pcbnew.B_Fab)
         fp.SetOrientationDegrees(rot)
         fp.SetPosition(pt(x, y))
         for pad in fp.Pads():
@@ -400,6 +448,17 @@ def build(battery_key):
             if net:
                 pad.SetNet(netinfo[net])
         rows.append([ref, val, f"{lib}:{name}", f"{x:.2f}", f"{y:.2f}", rot, "back"])
+
+    # The display tail keeps each finger's x position as it folds round the flat, and
+    # the panel's pin 1 is on the left in its front view: J3's EPD_VREFR pad must be
+    # on the left (-x) half, or the panel is wired mirror-image (v0.1 bug).
+    j3 = board.FindFootprintByReference("J3")
+    vref = [p for p in j3.Pads() if p.GetNetname() == "EPD_VREFR"][0]
+    vcom = [p for p in j3.Pads() if p.GetNetname() == "EPD_VCOM"][0]
+    assert vref.GetPosition().x < vcom.GetPosition().x and vref.GetPosition().x < mm(CX), \
+        "J3 is mirrored against the panel tail"
+    text(board, pcbnew.B_SilkS, "OPEN E-PIN v0.2", 16.5, 0.3, 1.0, mirror=True)
+    text(board, pcbnew.B_SilkS, "2026-11", 16.5, 1.9, 0.8, mirror=True)
 
     # Battery polarity marks beside J2.
     jx, jy, jr, jb = placed["J2"]

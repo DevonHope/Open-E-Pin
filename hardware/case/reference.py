@@ -40,9 +40,13 @@ def part_boxes():
         if p["height"] <= 0:
             continue
         x0, x1, y0, y1, h = p["x0"], p["x1"], -p["y1"], -p["y0"], p["height"]
-        if p["ref"] == "J1":                      # courtyard -> body width (8.94 mm)
+        if p["ref"] == "J1":                      # courtyard -> body (8.94 mm wide)
             c = (x0 + x1) / 2
             x0, x1 = c - 4.47, c + 4.47
+            # The courtyard runs 0.48 mm past the receptacle mouth (KiCad footprint: courtyard
+            # +4.205, body +3.725). Use the real mouth so the case's plug pocket sits on it and
+            # a plug can mate fully (v0.1 audit K-2). J1 is at the top, so the mouth is +Y.
+            y1 -= 0.48
         if p["ref"] == "SW1":                     # courtyard -> actuator tip
             x1 -= 0.25
         out.append((p["ref"], cq.Workplane("XY").box(x1 - x0, y1 - y0, h, centered=False)
