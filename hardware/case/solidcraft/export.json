@@ -1,5 +1,6 @@
 {"commands":[
-{"command": "inspect.interference", "params": {"exclude_pairs": [["SC_Insert_1", "SC_Bezel"], ["SC_Insert_2", "SC_Bezel"], ["SC_Screw_1", "SC_Insert_1"], ["SC_Screw_2", "SC_Insert_2"], ["ribbon", "part_J3"]]}},
+{"command": "inspect.interference", "params": {"exclude_pairs": [["SC_Screw_1", "SC_Bezel"], ["SC_Screw_2", "SC_Bezel"], ["ribbon", "part_J3"]]}},
+{"command": "inspect.clearance", "params": {"clearance": 0.2, "skip_within": "component"}},
 {"command": "file.export_step", "params": {"path": "../out/bezel.step", "bodies": ["SC_Bezel"]}},
 {"command": "file.export_step", "params": {"path": "../out/back_cover.step", "bodies": ["SC_BackCover"]}},
 {"command": "file.export_step", "params": {"path": "../out/button.step", "bodies": ["SC_Button"]}},
