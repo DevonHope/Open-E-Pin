@@ -1,0 +1,54 @@
+References,Qty,Value,Description,Manufacturer,Part number,Footprint,Note,Fitted
+C1,1,1u 25V,MLCC 1 uF 25 V X5R 10% 0402,Murata,GRM155R61E105KA12D,Capacitor_SMD:C_0402_1005Metric,X5R,yes
+C2 C3 C4 C10 C17,5,1u 10V,MLCC 1 uF 10 V X5R 10% 0402,Murata,GRM155R61A105KE15D,Capacitor_SMD:C_0402_1005Metric,"C2: X5R; C3: X5R, LDO input; C4: X5R, LDO output; C10: EPD_VDD (VCCI) 1u, X5R; C17: pin 15 VDD, X5R",yes
+C5 C7,2,100n,MLCC 100 nF 16 V X7R 10% 0402,Murata,GRM155R71C104KA88D,Capacitor_SMD:C_0402_1005Metric,C5: ADC hold; C7: module VDD,yes
+C6,1,4.7u,MLCC 4.7 uF 10 V X5R 20% 0402,Murata,GRM155R61A475MEAAD,Capacitor_SMD:C_0402_1005Metric,module VDD bulk,yes
+C11 C12 C13 C14 C15 C16 C18 C19 C20 C21 C22 C23 C24,13,1u 50V,MLCC 1 uF 50 V X7R 10% 0603 (alt Samsung CL10B105KB8NNNC),Murata,GRM188R71H105KAAL,Capacitor_SMD:C_0603_1608Metric,"C11: VGH, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C12: VGL, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C13: pin 1 VREFR, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C14: pin 4 VDDL, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C15: pin 5 VSH2, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C16: pin 6 VREFL, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C18: pin 16 VSH3, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C19: pin 18 VSL2, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C20: pin 19 VSL3, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C21: pin 20 VSH1, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C22: pin 22 VSL1, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C23: pin 24 VCOM, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC); C24: charge-pump flying cap, X7R 0603 (Murata GRM188R71H105KAAL or Samsung CL10B105KB8NNNC)",yes
+C25,1,4.7u 25V,MLCC 4.7 uF 25 V X5R 10% 0603,Murata,GRM188R61E475KE11D,Capacitor_SMD:C_0603_1608Metric,"module VBUS, X5R",yes
+D1 D2 D3,3,NSR0530H,Schottky 30 V 0.5 A SOD-323,onsemi,NSR0530HT1G,Diode_SMD:D_SOD-323,"D1: VGH diode. 30 V, 0.5 A, Vf<=430 mV (MBR0530 class); D2: charge pump to GND. 30 V, 0.5 A, Vf<=430 mV; D3: VGL diode. 30 V, 0.5 A, Vf<=430 mV",yes
+D4,1,red,LED red 0402,Kingbright,APHHS1005SURCK,LED_SMD:LED_0402_1005Metric,"charge indicator, seen through the back-cover window",yes
+F1,1,0.1A hold,PTC 0.10 A hold 15 V 0603,Bourns,MF-FSMF010X-2,Fuse:Fuse_0603_1608Metric,Bourns MF-FSMF010X-2 (0603; the MF-PSMF part is 0805),yes
+J1,1,USB-C,"USB-C receptacle USB 2.0, 0.60 mm stakes",GCT,USB4105-GF-A-060,Connector_USB:USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal,GCT USB4105-GF-A-060 (0.60 mm stakes for the 0.8 mm board),yes
+J2,1,BATT JST-PH,JST PH 2-pin side entry SMD,JST,S2B-PH-SM4-TB(LF)(SN),Connector_JST:JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal,JST S2B-PH-SM4-TB. Pin 1 = +,yes
+J3,1,GDEH0169E02,FPC 32-pin 0.5 mm bottom contact,Hirose,FH12-32S-0.5SH(55),Connector_FFC-FPC:Hirose_FH12-32S-0.5SH_1x32-1MP_P0.50mm_Horizontal,"Hirose FH12-32S-0.5SH(55), bottom contact. Pad n takes panel pin 33 - n (tail folded round the flat)",yes
+L1,1,47uH,Inductor 47 uH 3.0 x 3.0 x 1.0 mm,Taiyo Yuden,NRH3010T470MN,Inductor_SMD:L_Taiyo-Yuden_NR-30xx,Taiyo Yuden NRH3010T470MN,yes
+Q1,1,DMG2305UX,P-MOSFET -20 V SOT-23,Diodes Inc.,DMG2305UX-7,Package_TO_SOT_SMD:SOT-23,Diodes DMG2305UX-7,yes
+Q2,1,DMG1012T,N-MOSFET 20 V SOT-523,Diodes Inc.,DMG1012T-7,Package_TO_SOT_SMD:SOT-523,Diodes DMG1012T-7,yes
+Q3,1,NX3008NBK,N-MOSFET 30 V logic level SOT-23 (alt AOS AO3400A),Nexperia,"NX3008NBK,215",Package_TO_SOT_SMD:SOT-23,"Nexperia NX3008NBK; second source AOS AO3400A (both SOT-23, Vds 30 V, logic-level gate)",yes
+R1,1,4.53k,Resistor 4.53k 1% 1/16 W 0402,Yageo,RC0402FR-074K53L,Resistor_SMD:R_0402_1005Metric,1%. ISET: 135/4530 = 30 mA for the 60 mAh cell; fit 5.62k (24 mA) for the CM Batteries 55 mAh cell (28 mA max),yes
+R2 R3 R4,3,10M,Resistor 10M 1% 1/16 W 0402,Yageo,RC0402FR-0710ML,Resistor_SMD:R_0402_1005Metric,"R2: battery divider top, 1%; R3: battery divider bottom, 1%; R4: Q1 gate pull-up",yes
+R5 R14,2,100k,Resistor 100k 1% 1/16 W 0402,Yageo,RC0402FR-07100KL,Resistor_SMD:R_0402_1005Metric,R5: Q2 gate; R14: limits CHG node current into the 3 V GPIO,yes
+R6 R7,2,5.1k,Resistor 5.1k 1% 1/16 W 0402,Yageo,RC0402FR-075K1L,Resistor_SMD:R_0402_1005Metric,1%,yes
+R8,1,0.47,Resistor 0.47 ohm 1% 0603 current sense,Yageo,RL0603FR-070R47L,Resistor_SMD:R_0603_1608Metric,"1%, booster current sense",yes
+R11,1,2.2k,Resistor 2.2k 1% 1/16 W 0402,Yageo,RC0402FR-072K2L,Resistor_SMD:R_0402_1005Metric,,yes
+R12 R15,2,10k,Resistor 10k 1% 1/16 W 0402,Yageo,RC0402FR-0710KL,Resistor_SMD:R_0402_1005Metric,R12: BS0 low = 4-wire SPI; R15: booster FET gate pull-down,yes
+R16,1,470k,Resistor 470k 1% 1/16 W 0402,Yageo,RC0402FR-07470KL,Resistor_SMD:R_0402_1005Metric,Q2 gate from VBAT_SYS: turns Q1 on from the charger so a cell whose protection has cut off can be woken and recharged,yes
+R17,1,1k,Resistor 1k 1% 1/16 W 0402,Yageo,RC0402FR-071KL,Resistor_SMD:R_0402_1005Metric,button series resistor (ESD),yes
+RT1,1,10k B3380,NTC 10 k 1% B25/50 3380 K 0402,Murata,NCP15XH103F03RC,Resistor_SMD:R_0402_1005Metric,"Murata NCP15XH103F03RC, at the cell edge, thermal pad to the pouch",yes
+SW1,1,BUTTON,Tact switch side press,Panasonic,EVQ-P7A01P,Button_Switch_SMD:SW_SPST_EVQP7A,Panasonic EVQ-P7A side-press,yes
+TP1,1,3V0,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD,no (bare pad)
+TP2,1,SWDIO,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD,no (bare pad)
+TP3,1,SWDCLK,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD,no (bare pad)
+TP4,1,RESET,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD,no (bare pad)
+TP5,1,GND,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,SWD,no (bare pad)
+TP6,1,VBAT,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,test,no (bare pad)
+TP7,1,VBUS,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,test,no (bare pad)
+TP8,1,EPD_VDD,"Test pad 1.0 mm, no part",,,TestPoint:TestPoint_Pad_1.0x1.0mm,test,no (bare pad)
+U1,1,MDBT50Q-1MV2,"nRF52840 module, chip antenna (consign: LCSC rarely stocks it)",Raytac,MDBT50Q-1MV2,RF_Module:Raytac_MDBT50Q,"Raytac nRF52840 module, chip antenna",yes
+U2,1,BQ25101,Li-ion charger DSBGA-6 0.4 mm,Texas Instruments,BQ25101YFPR,OpenEPin:Texas_YFP0006_DSBGA-6_0.9x1.6mm_P0.4mm,"TI BQ25101YFPR (YFP0006, 0.4 mm pitch)",yes
+U3,1,TPS7A0230,LDO 3.0 V 200 mA SOT-23-5,Texas Instruments,TPS7A0230PDBVR,Package_TO_SOT_SMD:SOT-23-5,TI TPS7A0230PDBVR,yes
+U4,1,TPS22916C,Load switch DSBGA-4 0.4 mm,Texas Instruments,TPS22916CYFPR,OpenEPin:Texas_YFP0004_DSBGA-4_0.78x0.78mm_P0.4mm,"TI TPS22916CYFPR (YFP0004, 0.4 mm pitch)",yes
+U5,1,USBLC6-2SC6,USB ESD array SOT-23-6 (genuine ST),STMicroelectronics,USBLC6-2SC6,Package_TO_SOT_SMD:SOT-23-6,ST USBLC6-2SC6,yes
+BT1,1,,"LiPo 3.7 V ~60 mAh pouch, 16 x 13 x <=5 mm, JST PHR-2 lead (red = pin 1 = +), built-in PCM",,,not on board,"x2robotics 60 mAh (051215); needs datasheet, UN 38.3 and IEC 62133-2 reports before use. Alt: CM Batteries 55 mAh 2.5 mm custom cell with R1 = 5.62k",yes
+DS1,1,,Good Display GDEH0169E02 1.69in round 400 x 400 Spectra 6 e-paper,,,not on board,"Single source, spec rev 1.0",yes
+"MP1, MP2",2,,"Screw, thread-forming for plastics, M2 / 2.2 mm x 8, 90 deg countersunk, stainless",,,not on board,For example EJOT PT K22 x 8 countersunk (2.2 mm thread-forming); from the back into a 1.7 mm pilot in the bezel boss (no insert),yes
+"MP3, MP4",2,,"Tie tack post, flat 4.7 mm head, 1.15 mm (0.045 in) x 12.7 mm, plated (nickel-free)",,,not on board,Otto Frei 766-14 (yellow plated); avoid unplated nickel silver 765-14 for skin contact (REACH Annex XVII entry 27),yes
+"MP5, MP6",2,,"Locking tie tack clutch for 1.15 mm (0.045 in) posts, nickel-free plating",,,not on board,Otto Frei 385-61 / 386-61 family,yes
+MP7,1,,Printed bezel,,,not on board,hardware/case/out/bezel.stl,yes
+MP8,1,,Printed back cover,,,not on board,hardware/case/out/back_cover.stl,yes
+MP9,1,,Printed button plunger,,,not on board,hardware/case/out/button.stl,yes
+MP10,1,,Printed pin retainer bar,,,not on board,hardware/case/out/pin_retainer.stl,yes
+MP11,1,,"Double-sided foam tape 0.3 mm, ring outside the display active area",,,not on board,"e.g. 3M 4914 class VHB, cut to a ring",yes
+MP12,1,,"Foam pad 1.5 mm, 16 x 13 mm, between battery and back cover",,,not on board,Closed-cell PE or PU foam,yes
+MP13,1,,"Thermal pad 0.5 mm, 3 x 2 mm, between RT1 and the cell edge",,,not on board,Any silicone gap pad,yes
+MP14,1,,"2-part epoxy, 5 to 30 min",,,not on board,Under each post head,yes

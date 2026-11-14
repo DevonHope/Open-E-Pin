@@ -6,7 +6,10 @@ KiCad's library has no exact match for these TI DSBGA (YFP) packages, so they ar
 here from TI's package drawings:
   TPS22916C  YFP0004: 0.78 x 0.78 mm, 2 x 2 balls, 0.4 mm pitch, 0.5 mm max height
   BQ25101    YFP0006: 0.90 x 1.60 mm, 2 x 3 balls, 0.4 mm pitch, 0.5 mm max height
-Lands are 0.23 mm round, solder-mask defined per TI's example layout. Ball names follow
+Lands are 0.23 mm round copper, non-solder-mask-defined (NSMD): mask opening 0.30 mm
+(0.035 mm margin), paste aperture 0.25 mm. With a 0.08 mm stencil (or a 0.08 mm local
+step) the aperture area ratio is 0.78, inside IPC-7525's 0.66 minimum; with a 0.10 mm
+stencil it would be 0.63. No vias in or touching these lands (route.py checks). Ball names follow
 TI's bump view seen from the top: A1 top-left, letters go down, numbers go right.
 """
 import os
@@ -21,7 +24,7 @@ PARTS = {
         desc="TI YFP0006 DSBGA-6, 0.9x1.6 mm, 0.4 mm pitch (BQ25101)"),
 }
 PITCH = 0.4
-LAND = 0.23
+LAND = 0.23        # copper, NSMD
 
 
 def footprint(name, p):
@@ -48,7 +51,7 @@ def footprint(name, p):
         for col in range(cols):
             x, y = x0 + col * PITCH, y0 + r * PITCH
             lines.append(f'  (pad "{letter}{col + 1}" smd circle (at {x:.3f} {y:.3f}) (size {LAND} {LAND}) '
-                         '(layers "F.Cu" "F.Paste" "F.Mask") (solder_mask_margin 0.0))')
+                         '(layers "F.Cu" "F.Paste" "F.Mask") (solder_mask_margin 0.035) (solder_paste_margin 0.01))')
     lines.append(")")
     return "\n".join(lines) + "\n"
 

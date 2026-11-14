@@ -6,15 +6,25 @@ J2,BATT JST-PH,Connector_JST:JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal,20
 BAT,x2robotics 60 mAh 16x13x4,,0.75,-5.25,0,back
 SW1,BUTTON,Button_Switch_SMD:SW_SPST_EVQP7A,25.00,2.50,270,back
 L1,47uH,Inductor_SMD:L_Taiyo-Yuden_NR-30xx,10.00,10.25,0,back
-Q3,NX3008NBK,Package_TO_SOT_SMD:SOT-23,13.00,14.25,90,back
-R8,0.47,Resistor_SMD:R_0603_1608Metric,7.25,10.50,90,back
-R15,10k,Resistor_SMD:R_0402_1005Metric,12.50,11.25,90,back
-D1,NSR0530H,Diode_SMD:D_SOD-323,4.75,11.00,0,back
-D2,NSR0530H,Diode_SMD:D_SOD-323,4.75,8.75,0,back
-D3,NSR0530H,Diode_SMD:D_SOD-323,8.25,7.25,0,back
-C10,1u 25V,Capacitor_SMD:C_0402_1005Metric,2.00,11.50,0,back
-C11,1u 25V,Capacitor_SMD:C_0402_1005Metric,2.00,10.25,0,back
-C12,1u 25V,Capacitor_SMD:C_0402_1005Metric,0.25,11.00,90,back
+Q3,NX3008NBK,Package_TO_SOT_SMD:SOT-23,13.75,12.00,90,back
+C24,1u 50V,Capacitor_SMD:C_0603_1608Metric,12.75,8.25,90,back
+C10,1u 10V,Capacitor_SMD:C_0402_1005Metric,7.50,10.25,90,back
+R8,0.47,Resistor_SMD:R_0603_1608Metric,12.75,15.00,0,back
+R15,10k,Resistor_SMD:R_0402_1005Metric,16.25,13.00,90,back
+D1,NSR0530H,Diode_SMD:D_SOD-323,5.25,11.00,0,back
+D2,NSR0530H,Diode_SMD:D_SOD-323,5.25,8.75,0,back
+D3,NSR0530H,Diode_SMD:D_SOD-323,2.50,10.25,90,back
+C11,1u 50V,Capacitor_SMD:C_0603_1608Metric,0.50,10.50,90,back
+C12,1u 50V,Capacitor_SMD:C_0603_1608Metric,-1.25,10.50,90,back
+U3,TPS7A0230,Package_TO_SOT_SMD:SOT-23-5,-1.00,3.50,0,back
+C3,1u 10V,Capacitor_SMD:C_0402_1005Metric,-2.25,6.00,0,back
+C4,1u 10V,Capacitor_SMD:C_0402_1005Metric,0.25,6.00,0,back
+C6,4.7u,Capacitor_SMD:C_0402_1005Metric,-10.00,3.75,90,back
+C7,100n,Capacitor_SMD:C_0402_1005Metric,-10.00,5.75,90,back
+C25,4.7u 25V,Capacitor_SMD:C_0603_1608Metric,-9.75,8.50,90,back
+U4,TPS22916C,OpenEPin:Texas_YFP0004_DSBGA-4_0.78x0.78mm_P0.4mm,-2.00,8.00,0,back
+C17,1u 10V,Capacitor_SMD:C_0402_1005Metric,-3.50,8.25,90,back
+RT1,10k B3380,Resistor_SMD:R_0402_1005Metric,0.75,-12.75,0,back
 F1,0.1A hold,Fuse:Fuse_0603_1608Metric,-6.25,-20.00,90,back
 U5,USBLC6-2SC6,Package_TO_SOT_SMD:SOT-23-6,-3.25,-17.75,0,back
 R6,5.1k,Resistor_SMD:R_0402_1005Metric,4.00,-19.00,0,back
@@ -23,38 +33,37 @@ U2,BQ25101,OpenEPin:Texas_YFP0006_DSBGA-6_0.9x1.6mm_P0.4mm,4.00,-17.50,90,back
 C1,1u 25V,Capacitor_SMD:C_0402_1005Metric,4.00,-16.00,0,back
 C2,1u 10V,Capacitor_SMD:C_0402_1005Metric,2.25,-17.00,90,back
 R1,4.53k,Resistor_SMD:R_0402_1005Metric,5.75,-17.00,90,back
-TH1,10k B3380,Resistor_SMD:R_0402_1005Metric,8.00,-15.00,0,back
 R11,2.2k,Resistor_SMD:R_0402_1005Metric,0.00,-16.00,0,back
-LED1,red,LED_SMD:LED_0402_1005Metric,0.00,-14.75,0,back
+D4,red,LED_SMD:LED_0402_1005Metric,-10.00,-9.50,0,back
 R14,100k,Resistor_SMD:R_0402_1005Metric,0.00,-17.25,0,back
 Q1,DMG2305UX,Package_TO_SOT_SMD:SOT-23,11.00,-14.00,0,back
 Q2,DMG1012T,Package_TO_SOT_SMD:SOT-523,11.00,-17.00,0,back
 R4,10M,Resistor_SMD:R_0402_1005Metric,11.00,-11.50,0,back
-R5,100k,Resistor_SMD:R_0402_1005Metric,13.75,-14.00,90,back
-R2,10M,Resistor_SMD:R_0402_1005Metric,-1.00,2.25,0,back
-R3,10M,Resistor_SMD:R_0402_1005Metric,-3.25,2.25,0,back
-C5,100n,Capacitor_SMD:C_0402_1005Metric,1.00,2.25,0,back
-U3,TPS7A0230,Package_TO_SOT_SMD:SOT-23-5,-1.00,4.75,0,back
-C3,1u,Capacitor_SMD:C_0402_1005Metric,-8.25,-4.00,90,back
-C4,1u,Capacitor_SMD:C_0402_1005Metric,3.00,2.25,0,back
-C6,4.7u,Capacitor_SMD:C_0402_1005Metric,-5.25,2.25,0,back
-C7,100n,Capacitor_SMD:C_0402_1005Metric,-8.25,-2.00,90,back
-TP1,3V0,TestPoint:TestPoint_Pad_1.0x1.0mm,-9.00,10.00,0,back
-TP2,SWDIO,TestPoint:TestPoint_Pad_1.0x1.0mm,-11.25,10.00,0,back
-TP3,SWDCLK,TestPoint:TestPoint_Pad_1.0x1.0mm,-9.00,7.75,0,back
-TP4,RESET,TestPoint:TestPoint_Pad_1.0x1.0mm,-6.75,10.00,0,back
-TP5,GND,TestPoint:TestPoint_Pad_1.0x1.0mm,-6.75,7.75,0,back
-U4,TPS22916C,OpenEPin:Texas_YFP0004_DSBGA-4_0.78x0.78mm_P0.4mm,-2.00,8.00,0,back
-R12,10k,Resistor_SMD:R_0402_1005Metric,-1.50,11.50,0,back
-C13,1u 25V,Capacitor_SMD:C_0402_1005Metric,2.00,9.00,0,back
-C14,1u 25V,Capacitor_SMD:C_0402_1005Metric,0.00,9.25,0,back
-C15,1u 25V,Capacitor_SMD:C_0402_1005Metric,2.00,7.75,0,back
-C16,1u 25V,Capacitor_SMD:C_0402_1005Metric,-2.00,10.25,0,back
-C17,1u 25V,Capacitor_SMD:C_0402_1005Metric,0.00,8.00,0,back
-C18,1u 25V,Capacitor_SMD:C_0402_1005Metric,4.00,7.00,0,back
-C19,1u 25V,Capacitor_SMD:C_0402_1005Metric,-3.50,11.50,0,back
-C20,1u 35V,Capacitor_SMD:C_0402_1005Metric,2.00,6.00,90,back
-C21,1u 25V,Capacitor_SMD:C_0402_1005Metric,-3.75,9.75,90,back
-C22,1u 25V,Capacitor_SMD:C_0402_1005Metric,3.75,5.75,0,back
-C23,1u 25V,Capacitor_SMD:C_0402_1005Metric,5.75,6.50,90,back
-C24,1u 25V,Capacitor_SMD:C_0402_1005Metric,-3.50,7.75,90,back
+R5,100k,Resistor_SMD:R_0402_1005Metric,8.25,-14.00,90,back
+R16,470k,Resistor_SMD:R_0402_1005Metric,13.75,-14.00,90,back
+R2,10M,Resistor_SMD:R_0402_1005Metric,-3.75,2.75,90,back
+R3,10M,Resistor_SMD:R_0402_1005Metric,1.75,2.75,90,back
+C5,100n,Capacitor_SMD:C_0402_1005Metric,-5.00,2.75,90,back
+R17,1k,Resistor_SMD:R_0402_1005Metric,-18.50,-4.75,0,back
+TP1,3V0,TestPoint:TestPoint_Pad_1.0x1.0mm,-7.75,10.00,0,back
+TP2,SWDIO,TestPoint:TestPoint_Pad_1.0x1.0mm,-7.75,7.75,0,back
+TP3,SWDCLK,TestPoint:TestPoint_Pad_1.0x1.0mm,-11.75,10.00,0,back
+TP4,RESET,TestPoint:TestPoint_Pad_1.0x1.0mm,-5.50,10.00,0,back
+TP5,GND,TestPoint:TestPoint_Pad_1.0x1.0mm,-12.25,12.25,0,back
+TP6,VBAT,TestPoint:TestPoint_Pad_1.0x1.0mm,-5.50,7.75,0,back
+TP7,VBUS,TestPoint:TestPoint_Pad_1.0x1.0mm,-8.25,5.50,0,back
+TP8,EPD_VDD,TestPoint:TestPoint_Pad_1.0x1.0mm,-14.00,10.00,0,back
+R12,10k,Resistor_SMD:R_0402_1005Metric,-2.75,11.00,90,back
+C13,1u 50V,Capacitor_SMD:C_0603_1608Metric,1.75,7.75,0,back
+C14,1u 50V,Capacitor_SMD:C_0603_1608Metric,5.00,6.75,0,back
+C15,1u 50V,Capacitor_SMD:C_0603_1608Metric,3.00,5.00,0,back
+C16,1u 50V,Capacitor_SMD:C_0603_1608Metric,7.75,6.75,90,back
+C18,1u 50V,Capacitor_SMD:C_0603_1608Metric,5.50,4.25,90,back
+C19,1u 50V,Capacitor_SMD:C_0603_1608Metric,9.50,6.75,90,back
+C20,1u 50V,Capacitor_SMD:C_0603_1608Metric,-5.00,5.75,0,back
+C21,1u 50V,Capacitor_SMD:C_0603_1608Metric,8.00,4.25,0,back
+C22,1u 50V,Capacitor_SMD:C_0603_1608Metric,8.00,2.50,0,back
+C23,1u 50V,Capacitor_SMD:C_0603_1608Metric,12.00,17.50,90,back
+FID1,Fiducial,Fiducial:Fiducial_1mm_Mask2mm,-20.00,-14.00,0,back
+FID2,Fiducial,Fiducial:Fiducial_1mm_Mask2mm,20.00,-11.25,0,back
+FID3,Fiducial,Fiducial:Fiducial_1mm_Mask2mm,-12.50,20.00,0,back

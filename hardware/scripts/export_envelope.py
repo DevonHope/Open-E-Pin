@@ -35,6 +35,7 @@ HEIGHTS = [
     ("_0402_", 0.6, "0402 max"),
     ("TestPoint", 0.05, "bare pad"),
     ("MountingHole", 0.0, "hole"),
+    ("Fiducial", 0.0, "bare copper"),
 ]
 
 
